@@ -20,8 +20,7 @@ api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
 attachment_style = st.sidebar.selectbox(
     "Choose Attachment Style:",
-    ["SECURE", "INSECURE-AVOIDANT", "INSECURE-RESISTANT", "DISORGANIZED"]
-)
+    ["SECURE", "INSECURE-AVOIDANT", "INSECURE-RESISTANT", "DISORGANIZED"])
 
 # --- PASTE THE RESET BUTTON HERE ---
 st.sidebar.write("---")
