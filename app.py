@@ -5,22 +5,23 @@ import openai
 st.set_page_config(page_title="Strange Situation Simulator", layout="wide")
 st.title("👶 AI Strange Situation Simulator")
 st.caption("A developmental psychology tool for observing infant attachment behavior.")
-
 # 2. Sidebar Controls for the Instructor / Operator
 st.sidebar.header("⚙️ Simulation Settings")
-api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+api_key = st.sidebar.text_input("OpenAI API Key", type="password", key="sidebar_api_key")
 
 attachment_style = st.sidebar.selectbox(
     "Choose Attachment Style:",
-    ["SECURE", "INSECURE-AVOIDANT", "INSECURE-RESISTANT", "DISORGANIZED"]
+    ["SECURE", "INSECURE-AVOIDANT", "INSECURE-RESISTANT", "DISORGANIZED"],
+    key="sidebar_attachment_style"
 )
-# 2. Sidebar Controls for the Instructor / Operator
-st.sidebar.header("⚙️ Simulation Settings")
-api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
-attachment_style = st.sidebar.selectbox(
-    "Choose Attachment Style:",
-    ["SECURE", "INSECURE-AVOIDANT", "INSECURE-RESISTANT", "DISORGANIZED"])
+st.sidebar.write("---")
+if st.sidebar.button("🔄 Reset / Start New Lab", use_container_width=True, key="reset_button"):
+    st.session_state.messages = []
+    st.session_state.episode = 1
+    st.session_state.distress = 20
+    st.rerun()
+
 
 # --- PASTE THE RESET BUTTON HERE ---
 st.sidebar.write("---")
