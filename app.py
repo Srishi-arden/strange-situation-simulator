@@ -69,13 +69,28 @@ with col_chat:
 
     # Handle Input & Call OpenAI API
     if action_to_send:
-        # Check sidebar key first, otherwise fall back to hidden Streamlit Secrets
+        # 1. Check sidebar, 2. Check st.secrets, 3. Check environment
         api_key_to_use = api_key or st.secrets.get("OPENAI_API_KEY", "")
         
-        if not api_key_to_use:
-            st.error("Please enter an OpenAI API Key in the sidebar (or configure Secrets) to run the simulation!")
+        # Clean potential accidental whitespace
+        api_key_to_use = api_key_to_use.strip()
+
+        if not api_key_to_use or not api_key_to_use.startswith("sk-"):
+            st.error("⚠️ Invalid or missing API key! Key must start with 'sk-'. Check Streamlit Secrets.")
         else:
             client = openai.OpenAI(api_key=api_key_to_use)
+            
+            # Add user action
+            st.session_state.messages.append({"role": "user", "content": action_to_send})
+            with st.chat_message("user"):
+                st.write(action_to_send)
+
+            # Call AI
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "system", "content": SYSTEM_PROMPT}] + st.session_state.messages
+            )
+            ai_reply = response.choices[0].message.content
 
             # Call AI
             response = client.chat.completions.create(
