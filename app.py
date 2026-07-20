@@ -69,15 +69,13 @@ with col_chat:
 
     # Handle Input & Call OpenAI API
     if action_to_send:
-        if not api_key:
-            st.error("Please enter an OpenAI API Key in the sidebar to run the simulation!")
+        # Check sidebar key first, otherwise fall back to hidden Streamlit Secrets
+        api_key_to_use = api_key or st.secrets.get("OPENAI_API_KEY", "")
+        
+        if not api_key_to_use:
+            st.error("Please enter an OpenAI API Key in the sidebar (or configure Secrets) to run the simulation!")
         else:
-            client = openai.OpenAI(api_key=api_key)
-            
-            # Add user action
-            st.session_state.messages.append({"role": "user", "content": action_to_send})
-            with st.chat_message("user"):
-                st.write(action_to_send)
+            client = openai.OpenAI(api_key=api_key_to_use)
 
             # Call AI
             response = client.chat.completions.create(
