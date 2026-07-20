@@ -22,14 +22,6 @@ if st.sidebar.button("🔄 Reset / Start New Lab", use_container_width=True, key
     st.session_state.distress = 20
     st.rerun()
 
-
-# --- PASTE THE RESET BUTTON HERE ---
-st.sidebar.write("---")
-if st.sidebar.button("🔄 Reset / Start New Lab", use_container_width=True):
-    st.session_state.messages = []
-    st.session_state.episode = 1
-    st.session_state.distress = 20
-    st.rerun()
     
 # Initialize Session States
 if "messages" not in st.session_state:
